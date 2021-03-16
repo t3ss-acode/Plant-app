@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Plant_app</string>
+    <string name="id_plant_activity_name">Identity Plant Activity</string>
+    <string name="plantId_tutorial_text">Take a picture of your plant
+        and we will try and identify what plant it is</string>
+</resources>
