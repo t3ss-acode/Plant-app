@@ -7,21 +7,43 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.plant_app.model.Plant;
+import com.example.plant_app.model.PlantList;
+
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+
+    private static final String MAIN_LOG_TAG = "log_main";
+
+    // data
+    private List<Plant> plantList;
+
+    // ui
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        plantList = PlantList.getInstance();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String m = "main: " + plantList.toString();
+        Log.d(MAIN_LOG_TAG, m);
+    }
 
     public void toast(String message) {
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
@@ -29,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void identifyPlant(View view) {
+    public void toIdentifyPlant(View view) {
         toast("ID PLANT");
 
         Intent intent = new Intent(this, IdPlantActivity.class);
@@ -38,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void addPlant(View view) {
+    public void toAddPlant(View view) {
         toast("NEW PLANT");
 
         Intent intent = new Intent(this, AddPlantActivity.class);

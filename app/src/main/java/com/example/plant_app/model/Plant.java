@@ -90,4 +90,10 @@ public class Plant {
             return false;
         }
     }
+
+
+    @Override
+    public String toString() {
+        return "[Name: " +  name + ", Water in: " + waterReminder + ", Last watered: " + lastWatered + "]";
+    }
 }
