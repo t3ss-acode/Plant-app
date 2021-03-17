@@ -9,8 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Plant_app">
-        <activity android:name=".IdPlantActivity"
-            android:label = "@string/id_plant_activity_name"
+        <activity android:name=".AddPlantActivity"></activity>
+        <activity
+            android:name=".IdPlantActivity"
+            android:label="@string/id_plant_activity_name"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

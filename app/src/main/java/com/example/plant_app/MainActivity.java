@@ -38,8 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void createEntry(View view) {
+    public void addPlant(View view) {
         toast("NEW PLANT");
+
+        Intent intent = new Intent(this, AddPlantActivity.class);
+        startActivity(intent);
     }
 
 
