@@ -2,9 +2,7 @@ package com.example.plant_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -38,7 +36,7 @@ public class AddPlantActivity extends AppCompatActivity {
         plantList = PlantList.getInstance();
 
         mNameEditText = (EditText) findViewById(R.id.nameEditText);
-        mNumberEditText = (EditText) findViewById(R.id.numberEditText);
+        mNumberEditText = (EditText) findViewById(R.id.waterNumberEditText);
     }
 
 
@@ -53,7 +51,7 @@ public class AddPlantActivity extends AppCompatActivity {
             return;
         }
 
-        // Check that the nuumber can be parsed to an integer and is a positive number
+        // Check that the number can be parsed to an integer and is a positive number
         int number;
         try{
             number = Integer.valueOf(numberStr);
@@ -69,14 +67,16 @@ public class AddPlantActivity extends AppCompatActivity {
 
         try{
             plantList.add(new Plant(name, number));
-
-            String m = "add: " + plantList.toString();
-            Log.d(ADD_PLANT_LOG_TAG, m);
-
         }catch(Exception e) {
             toast(ERROR_ADDING_PLANT);
             return;
         }
+
+        // Empty text and go back to main
+        mNameEditText.setText("");
+        mNumberEditText.setText("");
+
+        finish();
     }
 
 

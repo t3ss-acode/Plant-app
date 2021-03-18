@@ -28,6 +28,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:textSize="24sp"
+        android:hint="ex. Orchid"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
@@ -45,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
 
     <EditText
-        android:id="@+id/numberEditText"
+        android:id="@+id/waterNumberEditText"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -54,6 +55,7 @@
         android:ems="10"
         android:gravity="center"
         android:inputType="number"
+        android:hint="ex. 3"
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/waterTextView"
         app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
@@ -67,7 +69,7 @@
         android:layout_marginTop="70dp"
         android:text="days"
         android:textSize="30sp"
-        app:layout_constraintStart_toEndOf="@+id/numberEditText"
+        app:layout_constraintStart_toEndOf="@+id/waterNumberEditText"
         app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
 
 
@@ -80,5 +82,51 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/nutrientsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:text="Give nutrients every"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <EditText
+        android:id="@+id/nutrientsNumberEditText"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:ems="10"
+        android:hint="ex. 10"
+        android:inputType="number"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nutrientsTextView" />
+
+    <TextView
+        android:id="@+id/nutrientsTextView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="days"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/nutrientsNumberEditText"
+        app:layout_constraintTop_toBottomOf="@+id/nutrientsTextView" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="80dp"
+        android:text="optional"
+        android:textColor="#969696"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/waterTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

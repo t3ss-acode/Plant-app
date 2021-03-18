@@ -4,9 +4,9 @@ public class Plant {
 
     private String name;
     private int waterReminder;
-    private int lastWatered;
-    private int nutrientsReminder;
-    private int lastNutrients;
+    private int lastWatered = -1;
+    private int nutrientsReminder = -1;
+    private int lastNutrients = -1;
 
 
     public Plant(String name, int waterReminder) {

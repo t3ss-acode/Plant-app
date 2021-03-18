@@ -1,6 +1,20 @@
 <resources>
     <string name="app_name">Plant_app</string>
     <string name="id_plant_activity_name">Identity Plant Activity</string>
+
     <string name="plantId_tutorial_text">Take a picture of your plant
         and we will try and identify what plant it is</string>
+
+    <string name="main_add_entry_button">Add entry</string>
+    <string name="main_identify_plant_button">Identify plant</string>
+
+    <string name="plant_name_item">Plant name</string>
+    <string name="water_in_item">Water in</string>
+    <string name="water_in_x_days_item">x days</string>
+    <string name="watered_item">Watered</string>
+    <string name="watered_x_days_ago_item">x days ago</string>
+    <string name="give_nutrients_in_item">Give nutrients in</string>
+    <string name="nutrients_in_x_days_item">x days</string>
+    <string name="given_nutrients_item">Given nutrients</string>
+    <string name="nutrients_x_days_ago_item">x days ago</string>
 </resources>

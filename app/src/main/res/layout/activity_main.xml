@@ -6,12 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/addPlantButton"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="4dp" />
+
+
     <Button
         android:id="@+id/addPlantButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="toAddPlant"
-        android:text="Add entry"
+        android:text="@string/main_add_entry_button"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/idPlantButton"
         app:layout_constraintHorizontal_bias="0.5"
@@ -22,7 +34,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="toIdentifyPlant"
-        android:text="Identify plant"
+        android:text="@string/main_identify_plant_button"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

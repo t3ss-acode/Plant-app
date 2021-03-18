@@ -1,6 +1,8 @@
 package com.example.plant_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Plant> plantList;
 
     // ui
+    private PlantAdapter mPlantAdapter;
 
 
     @Override
@@ -35,11 +38,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         plantList = PlantList.getInstance();
+
+        plantList.add(new Plant("Orchid", 1));
+        plantList.add(new Plant("ARCH", 5));
+        plantList.add(new Plant("ORCH", 2, 20));
+
+
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        // specify an adapter
+        mPlantAdapter = new PlantAdapter();
+        recyclerView.setAdapter(mPlantAdapter);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        mPlantAdapter.notifyDataSetChanged();
 
         String m = "main: " + plantList.toString();
         Log.d(MAIN_LOG_TAG, m);
