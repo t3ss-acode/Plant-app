@@ -35,13 +35,13 @@
 
     <ImageView
         android:id="@+id/takenImageView"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/taken_image_description"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/startCameraButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars"
-        android:contentDescription="@string/taken_image_description" />
+        tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>
