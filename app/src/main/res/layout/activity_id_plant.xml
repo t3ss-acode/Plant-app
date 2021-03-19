@@ -4,27 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EEFFF8"
     tools:context=".IdPlantActivity">
 
     <TextView
         android:id="@+id/tutorialTextView"
         android:layout_width="260dp"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/plantId_tutorial_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#21736A"
         android:textSize="20sp"
-        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/startCameraButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.420" />
 
     <Button
         android:id="@+id/startCameraButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="identifyPlant"
-        android:text="Okay"
+        android:text="@string/plantId_button_text"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -33,9 +37,11 @@
         android:id="@+id/takenImageView"
         android:layout_width="400dp"
         android:layout_height="400dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/startCameraButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:contentDescription="@string/taken_image_description" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EEFFF8"
     tools:context=".AddPlantActivity">
 
 
@@ -14,7 +15,8 @@
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="100dp"
-        android:text="Name"
+        android:text="@string/add_plant_name_text"
+        android:textAppearance="@android:style/TextAppearance.Medium"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,9 +30,11 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:textSize="24sp"
-        android:hint="ex. Orchid"
+        android:hint="@string/add_plant_name_example_text"
+        android:textAppearance="@android:style/TextAppearance.Medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
+
 
 
     <TextView
@@ -40,7 +44,8 @@
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="70dp"
-        android:text="Water every"
+        android:text="@string/add_plant_water_every_text"
+        android:textAppearance="@android:style/TextAppearance.Medium"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
@@ -55,7 +60,8 @@
         android:ems="10"
         android:gravity="center"
         android:inputType="number"
-        android:hint="ex. 3"
+        android:hint="@string/add_plant_water_example_text"
+        android:textAppearance="@android:style/TextAppearance.Medium"
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/waterTextView"
         app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
@@ -67,21 +73,27 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="70dp"
-        android:text="days"
+        android:text="@string/add_plant_water_days_text"
+        android:textAppearance="@android:style/TextAppearance.Medium"
         android:textSize="30sp"
         app:layout_constraintStart_toEndOf="@+id/waterNumberEditText"
         app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
 
 
-    <Button
-        android:id="@+id/addButton"
+
+    <TextView
+        android:id="@+id/optionalTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="addPlant"
-        android:text="Add plant"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="80dp"
+        android:text="@string/add_plant_optional_text"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textColor="#969696"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/waterTextView" />
 
     <TextView
         android:id="@+id/nutrientsTextView"
@@ -89,10 +101,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:text="Give nutrients every"
+        android:text="@string/add_plant_nutrients_every_text"
+        android:textAppearance="@android:style/TextAppearance.Medium"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/optionalTextView" />
 
     <EditText
         android:id="@+id/nutrientsNumberEditText"
@@ -101,7 +114,8 @@
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:ems="10"
-        android:hint="ex. 10"
+        android:hint="@string/add_plant_nutrients_example_text"
+        android:textAppearance="@android:style/TextAppearance.Medium"
         android:inputType="number"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -111,22 +125,21 @@
         android:id="@+id/nutrientsTextView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="days"
+        android:text="@string/add_plant_nutrients_days_text"
+        android:textAppearance="@android:style/TextAppearance.Medium"
         android:textSize="30sp"
         app:layout_constraintStart_toEndOf="@+id/nutrientsNumberEditText"
         app:layout_constraintTop_toBottomOf="@+id/nutrientsTextView" />
 
-    <TextView
-        android:id="@+id/textView6"
+
+    <Button
+        android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="80dp"
-        android:text="optional"
-        android:textColor="#969696"
+        android:onClick="addPlant"
+        android:text="@string/add_plant_button_text"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/waterTextView" />
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

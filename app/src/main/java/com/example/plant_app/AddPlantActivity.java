@@ -3,6 +3,7 @@ package com.example.plant_app;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,7 +26,9 @@ public class AddPlantActivity extends AppCompatActivity {
 
     //ui
     private EditText mNameEditText;
-    private EditText mNumberEditText;
+    private EditText mWaterNrEditText;
+    private EditText mNutrientsNrEditText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +39,15 @@ public class AddPlantActivity extends AppCompatActivity {
         plantList = PlantList.getInstance();
 
         mNameEditText = (EditText) findViewById(R.id.nameEditText);
-        mNumberEditText = (EditText) findViewById(R.id.waterNumberEditText);
+        mWaterNrEditText = (EditText) findViewById(R.id.waterNumberEditText);
+        mNutrientsNrEditText = (EditText) findViewById(R.id.nutrientsNumberEditText);
     }
 
 
     public void addPlant(View view) {
         String name = mNameEditText.getText().toString();
-        String numberStr = mNumberEditText.getText().toString();
+        String waterNrStr = mWaterNrEditText.getText().toString();
+        String nutrientsNrStr = mNutrientsNrEditText.getText().toString();
 
 
         // Check that a name has been entered
@@ -52,10 +57,10 @@ public class AddPlantActivity extends AppCompatActivity {
         }
 
         // Check that the number can be parsed to an integer and is a positive number
-        int number;
+        int waterNumber;
         try{
-            number = Integer.valueOf(numberStr);
-            if (number <= 0) {
+            waterNumber = Integer.parseInt(waterNrStr);
+            if (waterNumber <= 0) {
                 toast(INCORRECT_INPUT_NUMBER);
                 return;
             }
@@ -65,8 +70,28 @@ public class AddPlantActivity extends AppCompatActivity {
         }
 
 
+        // If something has been entered, check that it is a positive integer
+        int nutrientsNumber = -1;
+        if(!nutrientsNrStr.matches("")) {
+            try {
+                nutrientsNumber = Integer.parseInt(nutrientsNrStr);
+                if (nutrientsNumber <= 0) {
+                    toast(INCORRECT_INPUT_NUMBER);
+                    return;
+                }
+            } catch (Exception e) {
+                toast(INCORRECT_INPUT_NUMBER);
+                return;
+            }
+        }
+
+
+
         try{
-            plantList.add(new Plant(name, number));
+            if(nutrientsNumber != -1)
+                plantList.add(new Plant(name, waterNumber, nutrientsNumber));
+            else
+                plantList.add(new Plant(name, waterNumber));
         }catch(Exception e) {
             toast(ERROR_ADDING_PLANT);
             return;
@@ -74,10 +99,13 @@ public class AddPlantActivity extends AppCompatActivity {
 
         // Empty text and go back to main
         mNameEditText.setText("");
-        mNumberEditText.setText("");
+        mWaterNrEditText.setText("");
+        mNutrientsNrEditText.setText("");
 
         finish();
     }
+
+
 
 
 

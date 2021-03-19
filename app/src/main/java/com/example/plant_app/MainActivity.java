@@ -18,12 +18,18 @@ import android.widget.Toast;
 
 import com.example.plant_app.model.Plant;
 import com.example.plant_app.model.PlantList;
+import com.example.plant_app.storePlants.DeserializeFromFile;
+import com.example.plant_app.storePlants.SerializeToFile;
 
+import java.io.File;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String MAIN_LOG_TAG = "log_main";
+    private static final String SAVED_DATA_LOG_TAG = "log_saved_data";
+
+    private static final String FILENAME = "saved_plants";
 
     // data
     private List<Plant> plantList;
@@ -39,17 +45,38 @@ public class MainActivity extends AppCompatActivity {
 
         plantList = PlantList.getInstance();
 
-        plantList.add(new Plant("Orchid", 1));
-        plantList.add(new Plant("ARCH", 5));
-        plantList.add(new Plant("ORCH", 2, 20));
-
-
+        // Set up the recyclerView
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        // specify an adapter
         mPlantAdapter = new PlantAdapter();
         recyclerView.setAdapter(mPlantAdapter);
+
+
+        //Keep content of screen rotates
+        if (savedInstanceState != null) {
+            /*
+            approvedTimeTextView.setText(savedInstanceState.getString("approved_text"));
+            latTextView.setText(savedInstanceState.getString("lat_text"));
+            lonTextView.setText(savedInstanceState.getString("lon_text"));
+
+            if (savedInstanceState.getBoolean("loaded_visible")) {
+                loadedDataTextView.setText(savedInstanceState.getString("reply_text"));
+                loadedDataTextView.setVisibility(View.VISIBLE);
+            }
+
+             */
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Check if there is saved data
+        File file = new File(this.getFilesDir(), FILENAME);
+        if(file.length() > 0 && plantList.isEmpty())
+            new DeserializeFromFile(mPlantAdapter).execute(this.getFilesDir());
     }
 
     @Override
@@ -62,49 +89,57 @@ public class MainActivity extends AppCompatActivity {
         Log.d(MAIN_LOG_TAG, m);
     }
 
-    public void toast(String message) {
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
-        toast.show();
+    @Override
+    protected void onStop() {
+        super.onStop();
+        /*
+        // Volley, cancel pending requests
+        mRequestQueue.cancelAll(this);
+        //volley stop pending request. Ta bort resten i kön
+        */
+
+        Log.d("serede", ("in main, list size: " + plantList.size()));
+        if (plantList.size() > 0) {
+            Log.d("serede", "in main in if");
+            SerializeToFile.SavePlants(this.getFilesDir());
+        }
+        Log.d("serede", "in main, after if");
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        /*
+
+        //Save the state of the text boxes
+        outState.putString("approved_text", approvedTimeTextView.getText().toString());
+        outState.putString("lat_text", latTextView.getText().toString());
+        outState.putString("lon_text", lonTextView.getText().toString());
+
+        if (loadedDataTextView.getVisibility() == View.VISIBLE) {
+            outState.putBoolean("loaded_visible", true);
+            outState.putString("reply_text", loadedDataTextView.getText().toString());
+        }
+
+         */
     }
 
 
     public void toIdentifyPlant(View view) {
-        toast("ID PLANT");
-
         Intent intent = new Intent(this, IdPlantActivity.class);
         startActivity(intent);
     }
 
-
-
     public void toAddPlant(View view) {
-        toast("NEW PLANT");
-
         Intent intent = new Intent(this, AddPlantActivity.class);
         startActivity(intent);
     }
 
 
-    /*
-
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            // display error state to the user
-        }
+    public void toast(String message) {
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(imageBitmap);
-        }
-    }
-
-     */
 }

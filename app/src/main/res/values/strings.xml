@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">Plant_app</string>
     <string name="id_plant_activity_name">Identity Plant Activity</string>
+    <string name="add_plant_activity_name">Add Plant Activity</string>
 
-    <string name="plantId_tutorial_text">Take a picture of your plant
-        and we will try and identify what plant it is</string>
 
     <string name="main_add_entry_button">Add entry</string>
     <string name="main_identify_plant_button">Identify plant</string>
@@ -17,4 +16,20 @@
     <string name="nutrients_in_x_days_item">x days</string>
     <string name="given_nutrients_item">Given nutrients</string>
     <string name="nutrients_x_days_ago_item">x days ago</string>
+
+    <string name="add_plant_name_text">Name</string>
+    <string name="add_plant_name_example_text">ex. Orchid</string>
+    <string name="add_plant_water_every_text">Water every</string>
+    <string name="add_plant_water_example_text">ex. 3</string>
+    <string name="add_plant_water_days_text">days</string>
+    <string name="add_plant_optional_text">optional</string>
+    <string name="add_plant_nutrients_every_text">Give nutrients every</string>
+    <string name="add_plant_nutrients_example_text">ex. 10</string>
+    <string name="add_plant_nutrients_days_text">days</string>
+    <string name="add_plant_button_text">Add plant</string>
+
+    <string name="plantId_tutorial_text">Take a picture of your plant
+        and we will try and identify what plant it is</string>
+    <string name="taken_image_description">Displays the image taken</string>
+    <string name="plantId_button_text">Okay</string>
 </resources>

@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 public class IdPlantActivity extends AppCompatActivity {
 
+    private static final String ID_PLANT_LOG_TAG = "log_idplant";
+
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private ImageView takenImage;
