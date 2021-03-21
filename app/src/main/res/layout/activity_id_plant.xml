@@ -7,6 +7,30 @@
     android:background="#EEFFF8"
     tools:context=".IdPlantActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/plant_info_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/startCameraButton"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="4dp" />
+
+    <TextView
+        android:id="@+id/loading_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loading result, please wait"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#21736A"
+        android:textSize="24sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/startCameraButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25" />
+
     <TextView
         android:id="@+id/tutorialTextView"
         android:layout_width="260dp"
@@ -22,6 +46,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.420" />
 
+
+
     <Button
         android:id="@+id/startCameraButton"
         android:layout_width="wrap_content"
@@ -32,16 +58,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/takenImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/taken_image_description"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/startCameraButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>

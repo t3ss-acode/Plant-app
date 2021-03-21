@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.android.volley.Request;
@@ -27,7 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.plant_app.model.plantParser;
+import com.example.plant_app.model.PlantParser;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,11 +48,14 @@ public class IdPlantActivity extends AppCompatActivity {
     private static final String ID_PLANT_LOG_TAG = "log_idplant";
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private String JPG_IMAGE_NAME = "converted_image.jpg";
+    private String URL = "https://api.plant.id/v2/identify";
 
-    private String currentPhotoPath;
+    private String photoPath;
 
-    private ImageView takenImage;
     private TextView tutorialText;
+    private TextView loadingText;
+    private RecyclerView recyclerView;
+    private PlantIdInfoAdapter mPlantInfoAdapter;
 
     // Volley
     private RequestQueue mRequestQueue;
@@ -61,21 +66,34 @@ public class IdPlantActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_id_plant);
 
-        takenImage = (ImageView) findViewById(R.id.takenImageView);
         tutorialText = (TextView) findViewById(R.id.tutorialTextView);
+        loadingText = (TextView) findViewById(R.id.loading_text);
+
+        // Set up the recyclerView
+        recyclerView = findViewById(R.id.plant_info_recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        mPlantInfoAdapter = new PlantIdInfoAdapter();
+        recyclerView.setAdapter(mPlantInfoAdapter);
 
         mRequestQueue = Volley.newRequestQueue(this);
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        // Volley, cancel pending requests
-        mRequestQueue.cancelAll(this);
-        //volley stop pending request. Ta bort resten i kön
+    protected void onResume() {
+        super.onResume();
+
+        mPlantInfoAdapter.notifyDataSetChanged();
+        if(mPlantInfoAdapter.getItemCount() != 0)
+            tutorialText.setVisibility(View.INVISIBLE);
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //volley stop pending request. Ta bort resten i kön
+        mRequestQueue.cancelAll(this);
+    }
 
 
 
@@ -83,29 +101,26 @@ public class IdPlantActivity extends AppCompatActivity {
         dispatchTakePictureIntent();
     }
 
-
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
             try {
-                photoFile = createImageFile();
+                // Create the File where the photo should go
+                File photoFile = createImageFile();
 
-                if (photoFile != null) {
-                    Uri photoURI = FileProvider.getUriForFile(this,
-                            "com.example.plant_app.fileprovider",
-                            photoFile);
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                }
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.plant_app.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+
             } catch (IOException ex) {
                 Log.d(ID_PLANT_LOG_TAG, "Unable to create file for image");
+                toast("Unable to save image");
             }
         }else {
-            Toast toast = Toast.makeText(this, "You don't have a camera", Toast.LENGTH_SHORT);
-            toast.show();
+            toast("You don't have a camera");
         }
     }
 
@@ -114,84 +129,116 @@ public class IdPlantActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
+        File imageFile = File.createTempFile(
                 imageFileName,
                 ".jpg",
                 storageDir
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
+        photoPath = imageFile.getAbsolutePath();
+        return imageFile;
     }
+
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        try {
-            if (resultCode == RESULT_OK) {
-                File file = new File(currentPhotoPath);
-                Bitmap bitmap = MediaStore.Images.Media
-                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+        if (resultCode == RESULT_OK) {
+            File file = new File(photoPath);
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.fromFile(file));
                 if (bitmap != null) {
-                    //takenImage.setImageBitmap(bitmap);
                     bitmapToJpeg(rotateImage(bitmap));
                     File fl = new File(getFilesDir(), JPG_IMAGE_NAME);
-                    takenImage.setImageBitmap(BitmapFactory.decodeFile(fl.getPath()));
 
-
-                    takenImage.setVisibility(View.VISIBLE);
                     tutorialText.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    loadingText.setVisibility(View.VISIBLE);
 
-                    //plantIdTime(bitmap);
-                    String url = "https://api.plant.id/v2/identify";
-                    postVolleyRequest(url);
+                    postVolleyRequest();
                 }else {
                     Log.d(ID_PLANT_LOG_TAG, "Unable to display image");
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d(ID_PLANT_LOG_TAG, "Unable to get or display image");
             }
-
-        } catch (Exception error) {
-            error.printStackTrace();
         }
     }
 
-    protected void postVolleyRequest(String url) {
+    private boolean bitmapToJpeg(Bitmap bitmap) {
+        if (bitmap != null) {
+            OutputStream outputStream;
+            File file = new File(getFilesDir(), JPG_IMAGE_NAME);
+            try {
+                file.createNewFile(); // if file already exists will do nothing
+
+                // False so it overwrites and doesn't append
+                outputStream = new FileOutputStream(file, false);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
+                bitmap.recycle();
+                outputStream.close();
+
+                Log.d(ID_PLANT_LOG_TAG, "jpg convert done");
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d(ID_PLANT_LOG_TAG, "jpg convertion failed");
+                toast("Unable to handle image");
+            }
+
+        }
+        return false;
+    }
+
+    private Bitmap rotateImage(Bitmap bitmap) {
+        ExifInterface exifInterface = null;
+        try {
+            exifInterface = new ExifInterface(photoPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        Matrix matrix = new Matrix();
+        switch(orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                break;
+            default:
+        }
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
+
+
+
+    protected void postVolleyRequest() {
         String apiKey = "VemQ60qL6Uamrezf42iVCDKRl3VLTGAUApbLVmlkP3vFwoFkez";
 
-
         JSONObject data = new JSONObject();
-
         try {
-            String[] flowers = new String[]{JPG_IMAGE_NAME};
-
             data.put("api_key", apiKey);
 
-            Log.d(ID_PLANT_LOG_TAG, "adding images");
+            String[] flowers = new String[]{JPG_IMAGE_NAME};
             // add images
             JSONArray images = new JSONArray();
             for (String filename : flowers) {
-
-                Log.d(ID_PLANT_LOG_TAG, "in loop");
-
-                //String fileData = base64EncodeFromFile(filename);
                 File file = new File(getFilesDir(), filename);
                 byte[] buffer = new byte[(int) file.length() + 100];
                 FileInputStream inputStream = new FileInputStream(file);
                 int length = inputStream.read(buffer);
-                //int length = new FileInputStream(file).read(buffer);
                 String fileData = Base64.encodeToString(buffer, 0, length, Base64.DEFAULT);
 
-
                 images.put(fileData);
-
                 inputStream.close();
             }
-            Log.d(ID_PLANT_LOG_TAG, "before put images");
             data.put("images", images);
 
-            Log.d(ID_PLANT_LOG_TAG, "adding modifiers");
             // add modifiers
             JSONArray modifiers = new JSONArray()
                     .put("crops_fast")
@@ -210,36 +257,21 @@ public class IdPlantActivity extends AppCompatActivity {
                     .put("taxonomy")
                     .put("synonyms");
             data.put("plant_details", plantDetails);
-
-            Log.d(ID_PLANT_LOG_TAG, "before send post");
-
-
         }catch(Exception e) {
             Log.d(ID_PLANT_LOG_TAG, "error doin the extra");
         }
 
-        Log.d(ID_PLANT_LOG_TAG, "connection open");
-        /*
-        con.setDoOutput(true);
-        con.setDoInput(true);
-        con.setRequestMethod("POST");
-        con.setRequestProperty("Content-Type", "application/json");
-
-         */
-
         VolleyLog.DEBUG = true;
-        /*
 
         JsonObjectRequest plantRequest = new JsonObjectRequest(
                 Request.Method.POST,
-                url,
+                URL,
                 data,
                 responseListener,
                 errorListener);
         plantRequest.setTag(this); // mark this request, might have to cancel it in onStop
-        mRequestQueue.add(plantRequest); // Volley processes the request on a worker thread
 
-         */
+        mRequestQueue.add(plantRequest); // Volley processes the request on a worker thread
     }
 
     // executed on main thread
@@ -251,9 +283,7 @@ public class IdPlantActivity extends AppCompatActivity {
             try {
                 Log.d(ID_PLANT_LOG_TAG, "onRepsonse: " + responseObj);
 
-                new plantParser().execute(responseObj);
-
-
+                new PlantParser(mPlantInfoAdapter, loadingText, recyclerView).execute(responseObj);
 
                 // cancel pending requests
                 mRequestQueue.cancelAll(this);
@@ -274,61 +304,8 @@ public class IdPlantActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-    private boolean bitmapToJpeg(Bitmap bitmap) {
-        Log.d(ID_PLANT_LOG_TAG, "in bitmap to jpg");
-
-        if (bitmap != null) {
-            OutputStream outputStream;
-            try {
-                //File file = new File(JPG_IMAGE_NAME);
-                File file = new File(getFilesDir(), JPG_IMAGE_NAME);
-                file.createNewFile(); // if file already exists will do nothing
-                //FileOutputStream fileOut = new FileOutputStream(file);
-                FileOutputStream fileOut = new FileOutputStream(file, false);
-
-
-
-                outputStream = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
-                bitmap.recycle();
-
-                Log.d(ID_PLANT_LOG_TAG, "jpg convert done");
-                return true;
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-        return false;
+    public void toast(String message) {
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        toast.show();
     }
-
-    private Bitmap rotateImage(Bitmap bitmap) {
-        ExifInterface exifInterface = null;
-        try {
-            exifInterface = new ExifInterface(currentPhotoPath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-        Matrix matrix = new Matrix();
-        switch(orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                matrix.setRotate(90);
-                break;
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                matrix.setRotate(180);
-                break;
-            default:
-        }
-        Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-        return rotatedBitmap;
-    }
-
-
 }

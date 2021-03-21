@@ -12,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Plant_app">
-        <activity android:name=".IdResultActivity"></activity>
 
         <meta-data
             android:name="com.google.android.actions"
