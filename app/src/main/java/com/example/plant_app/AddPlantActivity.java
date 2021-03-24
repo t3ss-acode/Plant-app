@@ -2,15 +2,21 @@ package com.example.plant_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.plant_app.model.NotificationReceiver;
 import com.example.plant_app.model.Plant;
 import com.example.plant_app.model.PlantList;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class AddPlantActivity extends AppCompatActivity {
@@ -20,6 +26,9 @@ public class AddPlantActivity extends AppCompatActivity {
     private static final String INCORRECT_INPUT_NAME = "Please enter a name";
     private static final String INCORRECT_INPUT_NUMBER = "Please enter a positive number";
     private static final String ERROR_ADDING_PLANT = "ERROR: Unable to add plant entry";
+    private static final String ERROR_NOTIFICATION = "ERROR: Unable to set notification";
+
+    private static final int NOTIFICATION_CHANNEL = 1001;
 
     // data
     private List<Plant> plantList;
@@ -97,6 +106,26 @@ public class AddPlantActivity extends AppCompatActivity {
             return;
         }
 
+
+        // Add notification
+        try{
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 22);
+            calendar.set(Calendar.MINUTE, 31);
+            calendar.set(Calendar.SECOND, 0);
+
+            Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
+                    NOTIFICATION_CHANNEL, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), (AlarmManager.INTERVAL_DAY*waterNumber), pendingIntent);
+
+        }catch(Exception e) {
+            toast(ERROR_NOTIFICATION);
+            return;
+        }
+
         // Empty text and go back to main
         mNameEditText.setText("");
         mWaterNrEditText.setText("");
@@ -104,6 +133,32 @@ public class AddPlantActivity extends AppCompatActivity {
 
         finish();
     }
+
+
+
+    /*
+
+    public void myAlarm() {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 17);
+        calendar.set(Calendar.MINUTE, 13);
+        calendar.set(Calendar.SECOND, 0);
+
+        if (calendar.getTime().compareTo(new Date()) < 0)
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+
+        Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        if (alarmManager != null) {
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        }
+    }
+
+     */
 
 
 

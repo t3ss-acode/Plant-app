@@ -4,24 +4,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.ActivityNotFoundException;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.plant_app.model.NotificationReceiver;
 import com.example.plant_app.model.Plant;
 import com.example.plant_app.model.PlantList;
 import com.example.plant_app.storePlants.DeserializeFromFile;
 import com.example.plant_app.storePlants.SerializeToFile;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
     private PlantAdapter mPlantAdapter;
 
 
+    private final static String default_notification_channel_id = "default";
+    final Calendar myCalendar = Calendar.getInstance ();
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         mPlantAdapter = new PlantAdapter();
         recyclerView.setAdapter(mPlantAdapter);
+
+
+        Log.d(MAIN_LOG_TAG, "what the hell");
 
 
         //Keep content of screen rotates
@@ -87,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
 
         String m = "main: " + plantList.toString();
         Log.d(MAIN_LOG_TAG, m);
+
+        myAlarm();
     }
 
     @Override
@@ -127,8 +139,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void toIdentifyPlant(View view) {
-        Intent intent = new Intent(this, IdPlantActivity.class);
-        startActivity(intent);
+        // Check the status of the network connection.
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = null;
+        if (connMgr != null) {
+            networkInfo = connMgr.getActiveNetworkInfo();
+        }
+
+        //If there is internet connection, allow access to IdPlant activity
+        if (networkInfo != null && networkInfo.isConnected()) {
+            Intent intent = new Intent(this, IdPlantActivity.class);
+            startActivity(intent);
+        } else {
+            toast("Connect to the internet to use this feature");
+        }
     }
 
     public void toAddPlant(View view) {
@@ -138,8 +162,33 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void toast(String message) {
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
         toast.show();
     }
 
+
+
+
+
+
+
+
+
+    public void myAlarm() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 17);
+        calendar.set(Calendar.MINUTE, 13);
+        calendar.set(Calendar.SECOND, 0);
+
+        if (calendar.getTime().compareTo(new Date()) < 0)
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+
+        Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        if (alarmManager != null) {
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
+    }
 }
