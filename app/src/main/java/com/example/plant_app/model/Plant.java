@@ -1,5 +1,7 @@
 package com.example.plant_app.model;
 
+import com.example.plant_app.storePlants.PlantIdKeeper;
+
 public class Plant implements java.io.Serializable {
 
     private String name;
@@ -7,17 +9,20 @@ public class Plant implements java.io.Serializable {
     private int lastWatered = -1;
     private int nutrientsReminder = -1;
     private int lastNutrients = -1;
+    private int id;
 
 
     public Plant(String name, int waterReminder) {
         this.name = name;
         this.waterReminder = waterReminder;
+        id = PlantIdKeeper.getPlantId();
     }
 
     public Plant(String name, int waterReminder, int nutrientsReminder) {
         this.name = name;
         this.waterReminder = waterReminder;
         this.nutrientsReminder = nutrientsReminder;
+        id = PlantIdKeeper.getPlantId();
     }
 
 
@@ -91,9 +96,14 @@ public class Plant implements java.io.Serializable {
         }
     }
 
+    public int getId() {
+        return id;
+    }
+
 
     @Override
     public String toString() {
-        return "[Name: " +  name + ", Water in: " + waterReminder + ", Last watered: " + lastWatered + "]";
+        return "[Name: " +  name + ", Water in: " + waterReminder +
+                ", Last watered: " + lastWatered + ", Id: " + id + "]";
     }
 }

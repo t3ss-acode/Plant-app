@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.plant_app.model.NotificationReceiver;
 import com.example.plant_app.model.Plant;
+import com.example.plant_app.storePlants.PlantIdKeeper;
 import com.example.plant_app.model.PlantList;
 import com.example.plant_app.storePlants.DeserializeFromFile;
 import com.example.plant_app.storePlants.SerializeToFile;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     // data
     private List<Plant> plantList;
+    private int currentId;
 
     // ui
     private PlantAdapter mPlantAdapter;
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         plantList = PlantList.getInstance();
+        currentId = PlantIdKeeper.getCurrentId();
 
         // Set up the recyclerView
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         mPlantAdapter = new PlantAdapter();
         recyclerView.setAdapter(mPlantAdapter);
+
 
 
         Log.d(MAIN_LOG_TAG, "what the hell");

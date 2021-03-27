@@ -28,8 +28,6 @@ public class AddPlantActivity extends AppCompatActivity {
     private static final String ERROR_ADDING_PLANT = "ERROR: Unable to add plant entry";
     private static final String ERROR_NOTIFICATION = "ERROR: Unable to set notification";
 
-    private static final int NOTIFICATION_CHANNEL = 1001;
-
     // data
     private List<Plant> plantList;
 
@@ -109,14 +107,18 @@ public class AddPlantActivity extends AppCompatActivity {
 
         // Add notification
         try{
+            Log.d(ADD_PLANT_LOG_TAG, Integer.toString(getAddedPlantId()));
             Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 22);
-            calendar.set(Calendar.MINUTE, 31);
+            calendar.set(Calendar.HOUR_OF_DAY, 19);
+            calendar.set(Calendar.MINUTE, 35);
             calendar.set(Calendar.SECOND, 0);
 
+            int notificationChannel = getAddedPlantId();
+
             Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+            intent.putExtra("plantId", getAddedPlantId());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
-                    NOTIFICATION_CHANNEL, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    notificationChannel, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), (AlarmManager.INTERVAL_DAY*waterNumber), pendingIntent);
@@ -132,6 +134,11 @@ public class AddPlantActivity extends AppCompatActivity {
         mNutrientsNrEditText.setText("");
 
         finish();
+    }
+
+
+    private int getAddedPlantId() {
+        return plantList.get(plantList.size()-1).getId();
     }
 
 

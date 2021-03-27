@@ -73,6 +73,13 @@ public class DeserializeFromFile extends AsyncTask<File, Void, ArrayList<Object>
             mPlantList.get().clear();
             mPlantList.get().addAll((List<Plant>) deserializedData.get(0));
 
+            int mPlantId = (int) deserializedData.get(1);
+            PlantIdKeeper.setCurrentId(mPlantId);
+            String m = "number " + mPlantId;
+            Log.d(SAVED_DATA_LOG_TAG, m);
+            m = "id " + PlantIdKeeper.getCurrentId();
+            Log.d(SAVED_DATA_LOG_TAG, m);
+
             mPlantAdapter.get().notifyDataSetChanged();
 
             Log.d(SAVED_DATA_LOG_TAG, "Views have been filled");

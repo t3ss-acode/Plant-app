@@ -2,14 +2,12 @@ package com.example.plant_app.storePlants;
 
 import android.util.Log;
 
-import com.example.plant_app.model.Plant;
 import com.example.plant_app.model.PlantList;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SerializeToFile {
     private static final String SAVED_DATA_LOG_TAG = "log_saved_data";
@@ -23,6 +21,7 @@ public class SerializeToFile {
         ArrayList<Object> data = new ArrayList<>();
 
         data.add(PlantList.getInstance());
+        data.add(PlantIdKeeper.getCurrentId());
 
         try {
             File file = new File(directory, FILENAME);
