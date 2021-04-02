@@ -30,6 +30,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+
+/**
+ * TODO: Ändra hur "water in x days" och "watered x days ago" funkar så de kan funka även om man
+ *       ändrar tiden
+ *
+ */
+
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String MAIN_LOG_TAG = "log_main";

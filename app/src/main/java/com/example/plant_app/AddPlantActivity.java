@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.plant_app.model.NotificationReceiver;
+import com.example.plant_app.model.NotificationSetter;
 import com.example.plant_app.model.Plant;
 import com.example.plant_app.model.PlantList;
 
@@ -106,24 +107,38 @@ public class AddPlantActivity extends AppCompatActivity {
 
 
         // Add notification
+        /*
         try{
+
             Log.d(ADD_PLANT_LOG_TAG, Integer.toString(getAddedPlantId()));
             Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 19);
-            calendar.set(Calendar.MINUTE, 35);
+            calendar.set(Calendar.HOUR_OF_DAY, 20);
+            calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.SECOND, 0);
 
-            int notificationChannel = getAddedPlantId();
+            int id = getAddedPlantId();
 
             Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
-            intent.putExtra("plantId", getAddedPlantId());
+            intent.putExtra("plant_name", name);
+            intent.putExtra("plantId", id);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
-                    notificationChannel, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), (AlarmManager.INTERVAL_DAY*waterNumber), pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    (AlarmManager.INTERVAL_DAY*waterNumber), pendingIntent);
 
         }catch(Exception e) {
+            toast(ERROR_NOTIFICATION);
+            return;
+        }
+
+         */
+
+        boolean notiSuccess = new NotificationSetter().createNotification(
+                getApplicationContext(), getAddedPlantId(), name, waterNumber);
+
+        if(!notiSuccess) {
             toast(ERROR_NOTIFICATION);
             return;
         }
@@ -140,32 +155,6 @@ public class AddPlantActivity extends AppCompatActivity {
     private int getAddedPlantId() {
         return plantList.get(plantList.size()-1).getId();
     }
-
-
-
-    /*
-
-    public void myAlarm() {
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 17);
-        calendar.set(Calendar.MINUTE, 13);
-        calendar.set(Calendar.SECOND, 0);
-
-        if (calendar.getTime().compareTo(new Date()) < 0)
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-
-        Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-        if (alarmManager != null) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-
-        }
-    }
-
-     */
 
 
 

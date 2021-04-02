@@ -48,7 +48,7 @@ public class DeserializeFromFile extends AsyncTask<File, Void, ArrayList<Object>
 
         try {
             File file = new File(directory, FILENAME);
-            Log.d(SAVED_DATA_LOG_TAG, ("file length" + file.length()));
+            Log.d(SAVED_DATA_LOG_TAG, ("file length " + file.length()));
 
             //Get access to the file
             FileInputStream fileIn = new FileInputStream(file);
