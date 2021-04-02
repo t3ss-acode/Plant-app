@@ -1,15 +1,18 @@
 package com.example.plant_app;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String SAVED_DATA_LOG_TAG = "log_saved_data";
 
     private static final String FILENAME = "saved_plants";
+    public static final String SELECTED_PLANT = "selected_plant";
 
     // data
     private List<Plant> plantList;
@@ -55,11 +59,18 @@ public class MainActivity extends AppCompatActivity {
         plantList = PlantList.getInstance();
         currentId = PlantIdKeeper.getCurrentId();
 
+
         // Set up the recyclerView
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        mPlantAdapter = new PlantAdapter();
+        mPlantAdapter = new PlantAdapter(
+                new PlantAdapter.IOnItemSelectedCallBack() {
+                    @Override
+                    public void onItemClicked(int position) {
+                        onPlantSelected(position);
+                    }
+                });
         recyclerView.setAdapter(mPlantAdapter);
 
 
@@ -105,22 +116,14 @@ public class MainActivity extends AppCompatActivity {
         myAlarm();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onStop() {
         super.onStop();
-        /*
-        // Volley, cancel pending requests
-        mRequestQueue.cancelAll(this);
-        //volley stop pending request. Ta bort resten i kön
-        */
 
-        Log.d("serede", ("in main, list size: " + plantList.size()));
         if (plantList.size() > 0) {
-            Log.d("serede", "in main in if");
             SerializeToFile.SavePlants(this.getFilesDir());
         }
-        Log.d("serede", "in main, after if");
-
     }
 
     @Override
@@ -139,6 +142,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
          */
+    }
+
+
+    /*
+     * Device selected, start DeviceActivity (displaying data)
+     */
+    private void onPlantSelected(int position) {
+        //Plant selectedPlant = plantList.get(position);
+
+        Log.d(MAIN_LOG_TAG, "" + position);
+
+        Intent intent = new Intent(this, EditPlantActivity.class);
+        intent.putExtra(SELECTED_PLANT, position);
+        startActivity(intent);
     }
 
 

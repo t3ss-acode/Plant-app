@@ -1,13 +1,18 @@
 package com.example.plant_app.storePlants;
 
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.plant_app.model.PlantList;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class SerializeToFile {
     private static final String SAVED_DATA_LOG_TAG = "log_saved_data";
@@ -17,11 +22,13 @@ public class SerializeToFile {
     public SerializeToFile() {
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static boolean SavePlants(File directory) {
         ArrayList<Object> data = new ArrayList<>();
 
         data.add(PlantList.getInstance());
         data.add(PlantIdKeeper.getCurrentId());
+        data.add(LocalDate.now());
 
         try {
             File file = new File(directory, FILENAME);

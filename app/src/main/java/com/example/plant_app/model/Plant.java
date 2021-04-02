@@ -6,8 +6,10 @@ public class Plant implements java.io.Serializable {
 
     private String name;
     private int waterReminder;
+    private int waterIn;
     private int lastWatered = -1;
     private int nutrientsReminder = -1;
+    private int nutrientsIn = -1;
     private int lastNutrients = -1;
     private int id;
 
@@ -15,13 +17,16 @@ public class Plant implements java.io.Serializable {
     public Plant(String name, int waterReminder) {
         this.name = name;
         this.waterReminder = waterReminder;
+        waterIn = waterReminder;
         id = PlantIdKeeper.getPlantId();
     }
 
     public Plant(String name, int waterReminder, int nutrientsReminder) {
         this.name = name;
         this.waterReminder = waterReminder;
+        waterIn = waterReminder;
         this.nutrientsReminder = nutrientsReminder;
+        nutrientsIn = nutrientsReminder;
         id = PlantIdKeeper.getPlantId();
     }
 
@@ -56,12 +61,24 @@ public class Plant implements java.io.Serializable {
         }
     }
 
+    public int getWaterIn() {
+        return waterIn;
+    }
+
+    public boolean setWaterIn(int waterIn) {
+        try{
+            this.waterIn = waterIn;
+            return true;
+        }catch(Exception e) {
+            return false;
+        }
+    }
+
     public int getLastWatered() {
         return lastWatered;
     }
 
     public boolean setLastWatered(int lastWatered) {
-
         try{
             this.lastWatered = lastWatered;
             return true;
@@ -77,6 +94,19 @@ public class Plant implements java.io.Serializable {
     public boolean setNutrientsReminder(int nutrientsReminder) {
         try{
             this.nutrientsReminder = nutrientsReminder;
+            return true;
+        }catch(Exception e) {
+            return false;
+        }
+    }
+
+    public int getNutrientsIn() {
+        return nutrientsIn;
+    }
+
+    public boolean setNutrientsIn(int nutrientsIn) {
+        try{
+            this.nutrientsIn = nutrientsIn;
             return true;
         }catch(Exception e) {
             return false;
@@ -103,7 +133,7 @@ public class Plant implements java.io.Serializable {
 
     @Override
     public String toString() {
-        return "[Name: " +  name + ", Water in: " + waterReminder +
+        return "[Name: " +  name + ", Water in: " + waterIn +
                 ", Last watered: " + lastWatered + ", Id: " + id + "]";
     }
 }

@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Plant_app">
+        <activity android:name=".EditPlantActivity"></activity>
 
         <meta-data
             android:name="com.google.android.actions"
@@ -37,9 +38,8 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".model.NotificationReceiver">
-        </receiver>
+        <receiver android:name=".model.NotificationReceiver"></receiver>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.plant_app.fileprovider"

@@ -1,7 +1,10 @@
 package com.example.plant_app.storePlants;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.plant_app.PlantAdapter;
 import com.example.plant_app.model.Plant;
@@ -12,7 +15,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class DeserializeFromFile extends AsyncTask<File, Void, ArrayList<Object>> {
@@ -75,16 +83,58 @@ public class DeserializeFromFile extends AsyncTask<File, Void, ArrayList<Object>
 
             int mPlantId = (int) deserializedData.get(1);
             PlantIdKeeper.setCurrentId(mPlantId);
-            String m = "number " + mPlantId;
-            Log.d(SAVED_DATA_LOG_TAG, m);
-            m = "id " + PlantIdKeeper.getCurrentId();
-            Log.d(SAVED_DATA_LOG_TAG, m);
+
+            LocalDate lastDate = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                lastDate = (LocalDate) deserializedData.get(2);
+                updateWaterCountdowns(lastDate);
+            }else {
+                Log.d(SAVED_DATA_LOG_TAG, "Unable to update water countdowns");
+            }
+
 
             mPlantAdapter.get().notifyDataSetChanged();
 
             Log.d(SAVED_DATA_LOG_TAG, "Views have been filled");
         }else {
             Log.d(SAVED_DATA_LOG_TAG, "No deserialized object");
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void updateWaterCountdowns(LocalDate lastDate) {
+        Log.d(SAVED_DATA_LOG_TAG, "in update");
+        LocalDate currentDate = LocalDate.now();
+        long daysBetween = ChronoUnit.DAYS.between(lastDate, currentDate);
+
+        Log.d(SAVED_DATA_LOG_TAG, ("between: " + daysBetween));
+
+        int waterIn;
+        int lastWatered;
+        boolean wateredPasses = false;
+
+        for(int i=0; i < mPlantList.get().size(); i++) {
+            waterIn = mPlantList.get().get(i).getWaterIn();
+            lastWatered = mPlantList.get().get(i).getLastWatered();
+
+            for(int j=0; j < daysBetween; j++) {
+                waterIn--;
+                lastWatered++;
+
+                if(waterIn < 0) {
+                    waterIn = mPlantList.get().get(i).getWaterReminder() -1;
+                    lastWatered = 1;
+                    wateredPasses = true;
+                }
+            }
+
+            mPlantList.get().get(i).setWaterIn(waterIn);
+
+            if(mPlantList.get().get(i).getLastWatered() != -1) {
+                mPlantList.get().get(i).setLastWatered(lastWatered);
+            }else if(mPlantList.get().get(i).getLastWatered() == -1 && wateredPasses) {
+                mPlantList.get().get(i).setLastWatered(lastWatered);
+            }
         }
     }
 }

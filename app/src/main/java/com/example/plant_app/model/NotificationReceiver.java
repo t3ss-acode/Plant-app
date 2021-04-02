@@ -152,6 +152,9 @@ public class NotificationReceiver extends BroadcastReceiver {
         Plant plant = getPlantFromId(plantId);
 
         if(plant != null) {
+            plant.setWaterIn(plant.getWaterReminder()-1);
+            plant.setLastWatered(0);
+            Log.d("log_saved_data", "in alarm: water updated");
             // Build the notification with all of the parameters.
             NotificationCompat.Builder notifyBuilder = new NotificationCompat
                     .Builder(context, WATER_CHANNEL_ID)
@@ -185,7 +188,6 @@ public class NotificationReceiver extends BroadcastReceiver {
      * @return plant with correct id else returns null
      */
     private Plant getPlantFromId(int id) {
-        List<Plant> plants = PlantList.getInstance();
         for(int i=0; i < plants.size(); i++) {
             if(plants.get(i).getId() == id)
                 return plants.get(i);

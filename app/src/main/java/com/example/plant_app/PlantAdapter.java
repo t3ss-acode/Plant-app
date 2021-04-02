@@ -1,5 +1,6 @@
 package com.example.plant_app;
 
+import android.bluetooth.BluetoothDevice;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,19 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.ViewHolder> 
 
     private List<Plant> plants = PlantList.getInstance();
 
+    // interface for callbacks when item selected
+    public interface IOnItemSelectedCallBack {
+        void onItemClicked(int position);
+    }
+    private IOnItemSelectedCallBack mOnItemSelectedCallback;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public PlantAdapter(IOnItemSelectedCallBack onItemSelectedCallback) {
+        super();
+        mOnItemSelectedCallback = onItemSelectedCallback;
+    }
+
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView nameTextView;
         public TextView waterInXDaysTextView;
         public TextView wateredXDaysAgoTextView;
@@ -33,8 +45,19 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.ViewHolder> 
         public TextView nutrientsInTextView;
         public TextView nutrientsAgoTextView;
 
-        public ViewHolder(View v) {
-            super(v);
+
+        ViewHolder(View itemView, IOnItemSelectedCallBack onItemSelectedCallback) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+            mOnItemSelectedCallback = onItemSelectedCallback;
+        }
+
+        private IOnItemSelectedCallBack mOnItemSelectedCallback;
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition(); // gets item (row) position
+            mOnItemSelectedCallback.onItemClicked(position);
         }
     }
 
@@ -43,7 +66,7 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.ViewHolder> 
     @Override
     public PlantAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.plant_item, parent, false);
-        final ViewHolder vh = new ViewHolder(itemView);
+        final ViewHolder vh = new ViewHolder(itemView, mOnItemSelectedCallback);
 
         vh.nameTextView = itemView.findViewById(R.id.plant_name_text);
         vh.waterInXDaysTextView = itemView.findViewById(R.id.water_in_x_days_text);
@@ -64,7 +87,7 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.ViewHolder> 
 
         //set the plant data for every view item
         vh.nameTextView.setText(plant.getName());
-        vh.waterInXDaysTextView.setText(checkIfSingleDayIn(plant.getWaterReminder()));
+        vh.waterInXDaysTextView.setText(checkIfSingleDayIn(plant.getWaterIn()));
         vh.wateredXDaysAgoTextView.setText(checkIfSingleDayAgo(plant.getLastWatered()));
         if(plant.getNutrientsReminder() != -1) {
             vh.nutrientsInTextView.setVisibility(View.VISIBLE);
@@ -75,6 +98,12 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.ViewHolder> 
             vh.nutrientsXDaysAgoTextView.setText(checkIfSingleDayAgo(plant.getLastNutrients()));
         }
     }
+
+    @Override
+    public int getItemCount() {
+        return plants.size();
+    }
+
 
     private String checkIfSingleDayIn(int days) {
         if(days > 1) {
@@ -92,8 +121,5 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.ViewHolder> 
     }
 
 
-    @Override
-    public int getItemCount() {
-        return plants.size();
-    }
+
 }
