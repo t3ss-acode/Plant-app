@@ -1,9 +1,11 @@
-package com.example.plant_app.model;
+package com.example.plant_app.notificationStuff;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+
+import com.example.plant_app.notificationStuff.NotificationReceiver;
 
 import java.util.Calendar;
 

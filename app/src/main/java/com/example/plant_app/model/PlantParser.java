@@ -7,8 +7,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.plant_app.PlantIdInfoAdapter;
-import com.example.plant_app.R;
+import com.example.plant_app.adapters.PlantIdInfoAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;

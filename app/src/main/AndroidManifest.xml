@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".model.NotificationReceiver"></receiver>
+        <receiver android:name=".notificationStuff.NotificationReceiver"></receiver>
 
         <provider
             android:name="androidx.core.content.FileProvider"

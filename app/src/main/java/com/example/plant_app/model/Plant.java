@@ -133,7 +133,8 @@ public class Plant implements java.io.Serializable {
 
     @Override
     public String toString() {
-        return "[Name: " +  name + ", Water in: " + waterIn +
-                ", Last watered: " + lastWatered + ", Id: " + id + "]";
+        return "[Name: " +  name + ", Water reminder: " + waterReminder + ", Water in: " + waterIn +
+                ", Nutrients reminder: " + nutrientsReminder + ", Nutrients in: " + nutrientsIn +
+                ", Id: " + id + "]";
     }
 }

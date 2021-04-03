@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -18,12 +17,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.plant_app.model.NotificationReceiver;
+import com.example.plant_app.adapters.PlantAdapter;
+import com.example.plant_app.notificationStuff.NotificationReceiver;
 import com.example.plant_app.model.Plant;
 import com.example.plant_app.storePlants.PlantIdKeeper;
 import com.example.plant_app.model.PlantList;
 import com.example.plant_app.storePlants.DeserializeFromFile;
 import com.example.plant_app.storePlants.SerializeToFile;
+import com.example.plant_app.util.MsgUtil;
 
 import java.io.File;
 import java.util.Calendar;
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         String m = "main: " + plantList.toString();
         Log.d(MAIN_LOG_TAG, m);
 
-        myAlarm();
+        //myAlarm();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -180,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, IdPlantActivity.class);
             startActivity(intent);
         } else {
-            toast("Connect to the internet to use this feature");
+            MsgUtil.toast(this, "Connect to the internet to use this feature");
         }
     }
 
@@ -190,10 +191,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void toast(String message) {
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
-        toast.show();
-    }
 
 
 
@@ -203,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+/*
     public void myAlarm() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 17);
@@ -220,4 +218,6 @@ public class MainActivity extends AppCompatActivity {
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         }
     }
+
+ */
 }

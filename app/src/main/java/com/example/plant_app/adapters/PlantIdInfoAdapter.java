@@ -1,4 +1,4 @@
-package com.example.plant_app;
+package com.example.plant_app.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +8,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.plant_app.model.Plant;
+import com.example.plant_app.R;
 import com.example.plant_app.model.PlantIdInfo;
 import com.example.plant_app.model.PlantIdInfoList;
-import com.example.plant_app.model.PlantList;
 
 import java.util.List;
 

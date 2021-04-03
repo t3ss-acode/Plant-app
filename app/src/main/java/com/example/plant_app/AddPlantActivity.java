@@ -2,22 +2,16 @@ package com.example.plant_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.plant_app.model.NotificationReceiver;
-import com.example.plant_app.model.NotificationSetter;
+import com.example.plant_app.notificationStuff.NotificationSetter;
 import com.example.plant_app.model.Plant;
 import com.example.plant_app.model.PlantList;
+import com.example.plant_app.util.MsgUtil;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class AddPlantActivity extends AppCompatActivity {
@@ -58,37 +52,26 @@ public class AddPlantActivity extends AppCompatActivity {
         String nutrientsNrStr = mNutrientsNrEditText.getText().toString();
 
 
+        InputChecker checker = new InputChecker();
         // Check that a name has been entered
-        if (name.matches("")) {
-            toast(INCORRECT_INPUT_NAME);
+        if(checker.isEmpty(name)) {
+            MsgUtil.toast(this, INCORRECT_INPUT_NAME);
             return;
         }
 
         // Check that the number can be parsed to an integer and is a positive number
-        int waterNumber;
-        try{
-            waterNumber = Integer.parseInt(waterNrStr);
-            if (waterNumber <= 0) {
-                toast(INCORRECT_INPUT_NUMBER);
-                return;
-            }
-        }catch(Exception e) {
-            toast(INCORRECT_INPUT_NUMBER);
+        int waterNr = checker.checkNumber(waterNrStr);
+        if(waterNr == -1) {
+            MsgUtil.toast(this, INCORRECT_INPUT_NUMBER);
             return;
         }
 
-
         // If something has been entered, check that it is a positive integer
-        int nutrientsNumber = -1;
-        if(!nutrientsNrStr.matches("")) {
-            try {
-                nutrientsNumber = Integer.parseInt(nutrientsNrStr);
-                if (nutrientsNumber <= 0) {
-                    toast(INCORRECT_INPUT_NUMBER);
-                    return;
-                }
-            } catch (Exception e) {
-                toast(INCORRECT_INPUT_NUMBER);
+        int nutrientsNr = -1;
+        if(!checker.isEmpty(nutrientsNrStr)) {
+            nutrientsNr = checker.checkNumber(nutrientsNrStr);
+            if(nutrientsNr == -1) {
+                MsgUtil.toast(this, INCORRECT_INPUT_NUMBER);
                 return;
             }
         }
@@ -96,12 +79,12 @@ public class AddPlantActivity extends AppCompatActivity {
 
 
         try{
-            if(nutrientsNumber != -1)
-                plantList.add(new Plant(name, waterNumber, nutrientsNumber));
+            if(nutrientsNr != -1)
+                plantList.add(new Plant(name, waterNr, nutrientsNr));
             else
-                plantList.add(new Plant(name, waterNumber));
+                plantList.add(new Plant(name, waterNr));
         }catch(Exception e) {
-            toast(ERROR_ADDING_PLANT);
+            MsgUtil.toast(this, ERROR_ADDING_PLANT);
             return;
         }
 
@@ -136,10 +119,10 @@ public class AddPlantActivity extends AppCompatActivity {
          */
 
         boolean notiSuccess = new NotificationSetter().createNotification(
-                getApplicationContext(), getAddedPlantId(), name, waterNumber);
+                getApplicationContext(), getAddedPlantId(), name, waterNr);
 
         if(!notiSuccess) {
-            toast(ERROR_NOTIFICATION);
+            MsgUtil.toast(this, ERROR_NOTIFICATION);
             return;
         }
 
@@ -157,11 +140,4 @@ public class AddPlantActivity extends AppCompatActivity {
     }
 
 
-
-
-
-    public void toast(String message) {
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
-        toast.show();
-    }
 }

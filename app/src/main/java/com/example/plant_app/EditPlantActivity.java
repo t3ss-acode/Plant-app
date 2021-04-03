@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.example.plant_app.model.Plant;
 import com.example.plant_app.model.PlantList;
 import com.example.plant_app.storePlants.PlantIdKeeper;
+import com.example.plant_app.util.MsgUtil;
 
 public class EditPlantActivity extends AppCompatActivity {
 
@@ -45,13 +47,11 @@ public class EditPlantActivity extends AppCompatActivity {
         Intent intent = getIntent();
         // Get the selected device from the intent
         int position = intent.getIntExtra(MainActivity.SELECTED_PLANT, -1);
-        Log.d(EDIT_LOG_TAG, "" + position);
         if (position == -1) {
             mNoPlantView.setVisibility(View.VISIBLE);
-            toast("No plant found");
+            MsgUtil.toast(this, "No plant found");
         } else {
             mSelectedPlant = PlantList.getInstance().get(position);
-            Log.d(EDIT_LOG_TAG, mSelectedPlant.toString());
 
             mNameView.setText(mSelectedPlant.getName());
             mWaterDaysView.setHint(Integer.toString(mSelectedPlant.getWaterReminder()));
@@ -65,55 +65,57 @@ public class EditPlantActivity extends AppCompatActivity {
         String waterReminder = mWaterDaysView.getText().toString();
         String nutrientsReminder = mNutrientsDaysView.getText().toString();
 
-
-        // TODO: Move this bit of logic from here and in add plant to its own class
+        boolean incorrectInput = false;
+        InputChecker checker = new InputChecker();
 
         // Check that a name has been entered
-        if (!name.matches("")) {
-            mSelectedPlant.setName(name);
+        if(checker.isEmpty(name)) {
+            MsgUtil.toast(this, INCORRECT_INPUT_NAME);
+            incorrectInput = true;
+            return;
         }
 
-
         // Check that the number can be parsed to an integer and is a positive number
-        if(!waterReminder.matches("")) {
-            int waterNumber;
-            try {
-                waterNumber = Integer.parseInt(waterReminder);
-                if (waterNumber <= 0) {
-                    toast(INCORRECT_INPUT_NUMBER);
-                    return;
-                }
-            } catch (Exception e) {
-                toast(INCORRECT_INPUT_NUMBER);
+        int waterNr = -1;
+        if(!checker.isEmpty(waterReminder)) {
+            waterNr = checker.checkNumber(waterReminder);
+            if(waterNr == -1) {
+                MsgUtil.toast(this, INCORRECT_INPUT_NUMBER);
+                incorrectInput = true;
                 return;
             }
         }
 
-
         // If something has been entered, check that it is a positive integer
-        if(!nutrientsReminder.matches("")) {
-            int nutrientsNumber = -1;
-            if (!nutrientsReminder.matches("")) {
-                try {
-                    nutrientsNumber = Integer.parseInt(nutrientsReminder);
-                    if (nutrientsNumber <= 0) {
-                        toast(INCORRECT_INPUT_NUMBER);
-                        return;
-                    }
-                } catch (Exception e) {
-                    toast(INCORRECT_INPUT_NUMBER);
-                    return;
-                }
+        int nutrientsNr = -1;
+        if(!checker.isEmpty(nutrientsReminder)) {
+            nutrientsNr = checker.checkNumber(nutrientsReminder);
+            if(nutrientsNr == -1) {
+                MsgUtil.toast(this, INCORRECT_INPUT_NUMBER);
+                incorrectInput = true;
+                return;
             }
         }
 
         // TODO: Update notification after I actually get it to work
 
-        mNameView.setText("");
-        mWaterDaysView.setText("");
-        mNutrientsDaysView.setText("");
+        if(incorrectInput == false) {
+            Log.d(EDIT_LOG_TAG, mSelectedPlant.toString());
+            mSelectedPlant.setName(name);
+            if(waterNr != -1)
+                mSelectedPlant.setWaterReminder(waterNr);
+            if(nutrientsNr != -1)
+                mSelectedPlant.setNutrientsReminder(nutrientsNr);
 
-        finish();
+            Log.d(EDIT_LOG_TAG, mSelectedPlant.toString());
+
+            mNameView.setText("");
+            mWaterDaysView.setText("");
+            mNutrientsDaysView.setText("");
+
+
+            finish();
+        }
     }
 
     public void deletePlant(View view) {
@@ -140,10 +142,5 @@ public class EditPlantActivity extends AppCompatActivity {
                 .setNegativeButton(android.R.string.no, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
-    }
-
-    public void toast(String message) {
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
-        toast.show();
     }
 }

@@ -6,7 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.plant_app.PlantAdapter;
+import com.example.plant_app.adapters.PlantAdapter;
 import com.example.plant_app.model.Plant;
 import com.example.plant_app.model.PlantList;
 
@@ -15,12 +15,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class DeserializeFromFile extends AsyncTask<File, Void, ArrayList<Object>> {

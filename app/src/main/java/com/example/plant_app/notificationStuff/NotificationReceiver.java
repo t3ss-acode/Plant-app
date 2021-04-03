@@ -1,4 +1,4 @@
-package com.example.plant_app.model;
+package com.example.plant_app.notificationStuff;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;

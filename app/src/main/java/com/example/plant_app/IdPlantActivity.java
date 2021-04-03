@@ -2,7 +2,6 @@ package com.example.plant_app;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -12,7 +11,6 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +27,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.plant_app.adapters.PlantIdInfoAdapter;
 import com.example.plant_app.model.PlantParser;
+import com.example.plant_app.util.MsgUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -117,10 +117,10 @@ public class IdPlantActivity extends AppCompatActivity {
 
             } catch (IOException ex) {
                 Log.d(ID_PLANT_LOG_TAG, "Unable to create file for image");
-                toast("Unable to save image");
+                MsgUtil.toast(this, "Unable to save image");
             }
         }else {
-            toast("You don't have a camera");
+            MsgUtil.toast(this, "You don't have a camera");
         }
     }
 
@@ -187,7 +187,7 @@ public class IdPlantActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.d(ID_PLANT_LOG_TAG, "jpg convertion failed");
-                toast("Unable to handle image");
+                MsgUtil.toast(this, "Unable to handle image");
             }
 
         }
@@ -300,12 +300,4 @@ public class IdPlantActivity extends AppCompatActivity {
             Log.i("Volley error", error.toString());
         }
     };
-
-
-
-
-    public void toast(String message) {
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
-        toast.show();
-    }
 }
