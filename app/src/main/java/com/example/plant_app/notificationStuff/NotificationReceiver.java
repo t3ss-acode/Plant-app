@@ -29,7 +29,6 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     // Notification ID.
     // NOTIFCATION_ID = the plants id
-    //private static final int NOTIFICATION_ID = 0;
 
     private NotificationManager mNotifyManager;
 
@@ -44,10 +43,6 @@ public class NotificationReceiver extends BroadcastReceiver {
             Intent repeatingIntent = new Intent(context, MainActivity.class);
             repeatingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-            /*
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, id,
-                    repeatingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-             */
             createNotificationChannel(context);
 
             // Build the notification with all of the parameters using helper method

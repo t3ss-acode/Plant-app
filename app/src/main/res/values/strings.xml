@@ -32,4 +32,10 @@
         and we will try and identify what plant it is</string>
     <string name="taken_image_description">Displays the image taken</string>
     <string name="plantId_button_text">Take photo</string>
+    <string name="loading_text">Loading result, please wait</string>
+    <string name="edit_delete_text">Delete</string>
+    <string name="edit_update_text">Update</string>
+    <string name="edit_water_every_X_text">Water every X days</string>
+    <string name="edit_nutrients_every_X_text">Give nutrients every X days</string>
+    <string name="edit_no_selected_plant_text">No plant found</string>
 </resources>

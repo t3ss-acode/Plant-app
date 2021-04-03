@@ -6,16 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.plant_app.model.Plant;
 import com.example.plant_app.model.PlantList;
-import com.example.plant_app.storePlants.PlantIdKeeper;
+import com.example.plant_app.notificationStuff.NotificationSetter;
 import com.example.plant_app.util.MsgUtil;
 
 public class EditPlantActivity extends AppCompatActivity {
@@ -24,7 +22,6 @@ public class EditPlantActivity extends AppCompatActivity {
 
     private static final String INCORRECT_INPUT_NAME = "Please enter a name";
     private static final String INCORRECT_INPUT_NUMBER = "Please enter a positive number";
-    private static final String ERROR_ADDING_PLANT = "ERROR: Unable to add plant entry";
 
     private Plant mSelectedPlant;
 
@@ -97,7 +94,6 @@ public class EditPlantActivity extends AppCompatActivity {
             }
         }
 
-        // TODO: Update notification after I actually get it to work
 
         if(incorrectInput == false) {
             Log.d(EDIT_LOG_TAG, mSelectedPlant.toString());
@@ -106,6 +102,10 @@ public class EditPlantActivity extends AppCompatActivity {
                 mSelectedPlant.setWaterReminder(waterNr);
             if(nutrientsNr != -1)
                 mSelectedPlant.setNutrientsReminder(nutrientsNr);
+
+            NotificationSetter notiSetter = new NotificationSetter();
+            // Create and update are the same so no specific update method
+            notiSetter.createNotification(getApplicationContext(), mSelectedPlant.getId(), name, mSelectedPlant.getWaterReminder());
 
             Log.d(EDIT_LOG_TAG, mSelectedPlant.toString());
 
@@ -119,7 +119,6 @@ public class EditPlantActivity extends AppCompatActivity {
     }
 
     public void deletePlant(View view) {
-
         new AlertDialog.Builder(this)
                 .setTitle("Delete entry")
                 .setMessage("Are you sure you want to delete this plant entry?")
@@ -128,6 +127,12 @@ public class EditPlantActivity extends AppCompatActivity {
                 // The dialog is automatically dismissed when a dialog button is clicked.
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+
+                        NotificationSetter notiSetter = new NotificationSetter();
+
+                        notiSetter.deleteNotification(getApplicationContext(),
+                                mSelectedPlant.getId(), mSelectedPlant.getName());
+
                         PlantList.getInstance().remove(mSelectedPlant);
 
                         mNameView.setText("");

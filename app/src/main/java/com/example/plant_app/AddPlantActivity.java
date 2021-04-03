@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.plant_app.notificationStuff.NotificationSetter;
 import com.example.plant_app.model.Plant;
@@ -76,8 +75,7 @@ public class AddPlantActivity extends AppCompatActivity {
             }
         }
 
-
-
+        // Depending on if nutrients reminder has been given, use different constructors
         try{
             if(nutrientsNr != -1)
                 plantList.add(new Plant(name, waterNr, nutrientsNr));
@@ -90,34 +88,6 @@ public class AddPlantActivity extends AppCompatActivity {
 
 
         // Add notification
-        /*
-        try{
-
-            Log.d(ADD_PLANT_LOG_TAG, Integer.toString(getAddedPlantId()));
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 20);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-
-            int id = getAddedPlantId();
-
-            Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
-            intent.putExtra("plant_name", name);
-            intent.putExtra("plantId", id);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
-                    id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                    (AlarmManager.INTERVAL_DAY*waterNumber), pendingIntent);
-
-        }catch(Exception e) {
-            toast(ERROR_NOTIFICATION);
-            return;
-        }
-
-         */
-
         boolean notiSuccess = new NotificationSetter().createNotification(
                 getApplicationContext(), getAddedPlantId(), name, waterNr);
 
@@ -138,6 +108,4 @@ public class AddPlantActivity extends AppCompatActivity {
     private int getAddedPlantId() {
         return plantList.get(plantList.size()-1).getId();
     }
-
-
 }
