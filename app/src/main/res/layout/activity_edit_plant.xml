@@ -12,13 +12,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editNoPlantTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/deletePlantButton" />
 
     <EditText
         android:id="@+id/editWaterEditText"

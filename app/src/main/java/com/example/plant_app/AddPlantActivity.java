@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.plant_app.model.InputChecker;
 import com.example.plant_app.notificationStuff.NotificationSetter;
 import com.example.plant_app.model.Plant;
 import com.example.plant_app.model.PlantList;

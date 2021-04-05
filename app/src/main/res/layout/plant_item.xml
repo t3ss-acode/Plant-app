@@ -33,6 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/water_in_item"
+            android:visibility="gone"
             android:textAppearance="@android:style/TextAppearance.Medium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -42,6 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/water_in_x_days_item"
+            android:visibility="gone"
             android:textAppearance="@android:style/TextAppearance.Medium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/water_in_text"
@@ -61,6 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/watered_item"
+            android:visibility="gone"
             android:textAppearance="@android:style/TextAppearance.Medium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -70,6 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/watered_x_days_ago_item"
+            android:visibility="gone"
             android:textAppearance="@android:style/TextAppearance.Medium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/watered_text"

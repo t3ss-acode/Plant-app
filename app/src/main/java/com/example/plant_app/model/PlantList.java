@@ -1,7 +1,5 @@
 package com.example.plant_app.model;
 
-import com.example.plant_app.model.Plant;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,4 +16,6 @@ public class PlantList {
             plants = new ArrayList<>();
         return plants;
     }
+
+
 }

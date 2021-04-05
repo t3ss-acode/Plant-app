@@ -12,37 +12,6 @@ public class PlantIdInfo {
     private String link;
 
 
-    /*
-        String name = jsonObj.getString("plant_name");
-        name = "Name: " + name;
-        Log.d(PLANT_PARSER_LOG_TAG, name);
-
-
-        JSONObject plantDetails = jsonObj.getJSONObject("plant_details");
-        JSONArray commonNamesJson = plantDetails.getJSONArray("common_names");
-        String commonNames = "Common names: ";
-        for(int i=0; i < commonNamesJson.length(); i++) {
-            commonNames = commonNames + ", " + commonNamesJson.getString(i);
-        }
-        Log.d(PLANT_PARSER_LOG_TAG, commonNames);
-
-
-        JSONObject wikiDescription = plantDetails.getJSONObject("wiki_description");
-        String description = "Wiki description: ";
-        description = description + wikiDescription.getString("value");
-        Log.d(PLANT_PARSER_LOG_TAG, description);
-
-
-        String link = "Link: ";
-        link = link + ", " + plantDetails.getString("url");
-        Log.d(PLANT_PARSER_LOG_TAG, link);
-
-
-        Long probability = jsonObj.getLong("probability");
-        Log.d(PLANT_PARSER_LOG_TAG, probability.toString());
-     */
-
-
     public PlantIdInfo(String name, double probability, List<String> commonNames, String description, String link) {
         this.name = name;
         this.probability = probability;

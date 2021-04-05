@@ -108,19 +108,4 @@ public class NotificationReceiver extends BroadcastReceiver {
                 .setDefaults(NotificationCompat.DEFAULT_ALL);
         return notifyBuilder;
     }
-
-
-
-    /*
-    private void updateNotification(Context context, int plantId, String name) {
-        // Build the notification with all of the parameters using helper method
-        NotificationCompat.Builder notifyBuilder = getNotificationBuilder(context, plantId, name);
-
-        notifyBuilder.setContentTitle("plant name: ");
-
-        // Deliver the notification.
-        mNotifyManager.notify(plantId, notifyBuilder.build());
-    }
-
-     */
 }

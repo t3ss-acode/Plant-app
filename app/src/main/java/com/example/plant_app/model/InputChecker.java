@@ -1,4 +1,4 @@
-package com.example.plant_app;
+package com.example.plant_app.model;
 
 public class InputChecker {
 

@@ -87,8 +87,10 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.ViewHolder> 
 
         //set the plant data for every view item
         vh.nameTextView.setText(plant.getName());
+        /*
         vh.waterInXDaysTextView.setText(checkIfSingleDayIn(plant.getWaterIn()));
-        vh.wateredXDaysAgoTextView.setText(checkIfSingleDayAgo(plant.getLastWatered()));
+        //vh.wateredXDaysAgoTextView.setText(checkIfSingleDayAgo(plant.getLastWatered()));
+        /*
         if(plant.getNutrientsReminder() != -1) {
             vh.nutrientsInTextView.setVisibility(View.VISIBLE);
             vh.nutrientsInXDaysTextView.setVisibility(View.VISIBLE);
@@ -97,6 +99,8 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.ViewHolder> 
             vh.nutrientsXDaysAgoTextView.setVisibility(View.VISIBLE);
             vh.nutrientsXDaysAgoTextView.setText(checkIfSingleDayAgo(plant.getLastNutrients()));
         }
+
+         */
     }
 
     @Override
